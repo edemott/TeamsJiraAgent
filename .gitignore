@@ -1,0 +1,21 @@
+# Python environment
+venv/
+env/
+env.bak/
+*.pyc
+__pycache__/
+
+# macOS files
+.DS_Store
+
+# Environment files with sensitive info
+.env
+.env.local
+.env.*.local
+*.env
+
+# Your specific env file (replace with actual filename)
+.env 
+
+# Logs
+*.log
