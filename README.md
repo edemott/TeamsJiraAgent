@@ -39,6 +39,7 @@ pip install -r requirements.txt
 1. Create an enviroment file to place api key
 2. Open the `.env` file and replace the placeholder with your API key:
    ```
+   GOOGLE_GENAI_USE_VERTEXAI=FALSE
    GOOGLE_API_KEY=your_api_key_here
    ```
 
