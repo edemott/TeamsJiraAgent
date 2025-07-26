@@ -52,11 +52,7 @@ extract_tool = FunctionTool(func=extract_task_fields)
 # ------------------------------------------------------
 # Jira configuration
 # ------------------------------------------------------
-# PROJECT_ID = "jira-project-465616"  # actual project ID for secrets
-# SECRET_ID = "jira_api_key"          # secret name in GCP
-# JIRA_EMAIL = "ethandemott@outlook.com"
-# JIRA_BASE_URL = "https://ethandemott.atlassian.net"
-# JIRA_PROJECT_KEY = "EM"
+
 
 def get_jira_token() -> str:
     token = os.getenv("JIRA_API_TOKEN")
@@ -123,4 +119,4 @@ Then, if the task looks actionable, use another tool to create a Jira ticket usi
     tools=[extract_tool,create_ticket_tool]
 )
 
-# to test run adk run tool_agent and type in somthing similar to this "'John, can you fix the login bug by Friday? It's urgent.'"
+# To test "run adk run tool_agent" and type in somthing similar to this: 'John, can you fix the login bug by Friday? It's urgent.'
