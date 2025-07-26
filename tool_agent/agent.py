@@ -74,18 +74,39 @@ def create_jira_ticket(task: dict) -> dict:
     # Provide default values in case task dict is missing fields
     summary = task.get("summary", "No summary provided")
     due_date = task.get("due_date", "N/A")
-    priority = task.get("priority", "Medium")
     issue_type = task.get("type", "Task")
+    epic_key = task.get("epic")        
+    sprint_id = task.get("sprint_id") 
 
-    data = {
-        "fields": {
-            "project": {"key": JIRA_PROJECT_KEY},
-            "summary": summary,
-            "description": f"Auto-created by AI agent.\nDue: {due_date}\nPriority: {priority}",
-            "issuetype": {"name": issue_type},
-            "priority": {"name": priority},
+    description_adf = {
+    "type": "doc",
+    "version": 1,
+    "content": [
+        {
+            "type": "paragraph",
+            "content": [
+                {"type": "text", "text": f"Auto-created by AI agent. Due: {due_date}."}
+            ]
         }
+    ]
+}
+
+    fields = {
+    "project": {"key": JIRA_PROJECT_KEY},
+    "summary": summary,
+    "description": description_adf,
+    "issuetype": {"name": issue_type},
     }
+
+    # Optional Epic link
+    if epic_key:
+        fields["customfield_10008"] = epic_key  
+
+    # Optional Sprint
+    if sprint_id:
+        fields["customfield_10020"] = sprint_id  
+
+    data = { "fields": fields }
 
     response = requests.post(
         f"{JIRA_BASE_URL}/rest/api/3/issue",
