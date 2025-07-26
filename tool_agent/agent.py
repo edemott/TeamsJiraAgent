@@ -4,6 +4,10 @@ from google.adk.agents import Agent
 from google.adk.tools import google_search
 from google.adk.tools import FunctionTool
 from google.cloud import secretmanager
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
 # Interprets Messages for Jira Format
@@ -48,28 +52,32 @@ JIRA_EMAIL = "ethandemott@outlook.com"
 JIRA_BASE_URL = "https://ethandemott.atlassian.net"
 JIRA_PROJECT_KEY = "EM"
 
-# Hardcoded token for local testing only
-HARDCODED_JIRA_TOKEN = (
-    'ATATT3xFfGF0d4AE2fqqjFwnl3g50YLS42z3SMWLwkviyfkDKoVA3XNDxWS3Hhi7-rEDBdDppLSjcg72sONIbJuOsGYnJpr9uO0jFVtF_RxRiH8Tumv7NG4coBOC2smt3BUSdJmUaqUanx9NWySVcWYytJATSe8w0n5aViYL2jpMfoyDPCsLvMs=0D1E2012'
-    #"ATCTT3xFfGN0VvJyckeT-9t1cpHS-_p6FaTgew6R5_l6YKU03bn_jck6vsZLNDmhuTP9OzdEHYkA18jrvLCJdizVoAz6DqzM5cmiqC5scvqAAVpenWulZNwDi5cnhrOEcFKqOgBpTALmvW75sRUT4z6KAiFlObGtaFPC_-8Zg0FVwcN25l-GobE=1E0BB662"
-)
+# # Hardcoded token for local testing only
+# HARDCODED_JIRA_TOKEN = (
+#     'ATATT3xFfGF0d4AE2fqqjFwnl3g50YLS42z3SMWLwkviyfkDKoVA3XNDxWS3Hhi7-rEDBdDppLSjcg72sONIbJuOsGYnJpr9uO0jFVtF_RxRiH8Tumv7NG4coBOC2smt3BUSdJmUaqUanx9NWySVcWYytJATSe8w0n5aViYL2jpMfoyDPCsLvMs=0D1E2012'
+#     #"ATCTT3xFfGN0VvJyckeT-9t1cpHS-_p6FaTgew6R5_l6YKU03bn_jck6vsZLNDmhuTP9OzdEHYkA18jrvLCJdizVoAz6DqzM5cmiqC5scvqAAVpenWulZNwDi5cnhrOEcFKqOgBpTALmvW75sRUT4z6KAiFlObGtaFPC_-8Zg0FVwcN25l-GobE=1E0BB662"
+# )
 
-# Toggle this flag to use hardcoded token instead of Secret Manager
-USE_HARDCODED_TOKEN = True
+# # Toggle this flag to use hardcoded token instead of Secret Manager
+# USE_HARDCODED_TOKEN = True
 
-# ------------------------------------------------------
-# Secure token retrieval (or fallback to hardcoded for testing)
-# ------------------------------------------------------
+# # ------------------------------------------------------
+# # Secure token retrieval (or fallback to hardcoded for testing)
+# # ------------------------------------------------------
+# def get_jira_token() -> str:
+#     if USE_HARDCODED_TOKEN:
+#         # 🚨 WARNING: Hardcoding secrets is insecure. Do this for local testing only.
+#         return HARDCODED_JIRA_TOKEN
+#     else:
+#         client = secretmanager.SecretManagerServiceClient()
+#         name = f"projects/{PROJECT_ID}/secrets/{SECRET_ID}/versions/latest"
+#         response = client.access_secret_version(request={"name": name})
+#         return response.payload.data.decode("UTF-8")
 def get_jira_token() -> str:
-    if USE_HARDCODED_TOKEN:
-        # 🚨 WARNING: Hardcoding secrets is insecure. Do this for local testing only.
-        return HARDCODED_JIRA_TOKEN
-    else:
-        client = secretmanager.SecretManagerServiceClient()
-        name = f"projects/{PROJECT_ID}/secrets/{SECRET_ID}/versions/latest"
-        response = client.access_secret_version(request={"name": name})
-        return response.payload.data.decode("UTF-8")
-
+    token = os.getenv("JIRA_API_TOKEN")
+    if not token:
+        raise ValueError("Missing JIRA_API_TOKEN in environment.")
+    return token
 # ------------------------------------------------------
 # Create Jira issue from task fields
 # ------------------------------------------------------
