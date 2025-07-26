@@ -26,7 +26,9 @@ pip install -r requirements.txt
 ```
 
 
-### Setting Up API Keys
+## Setting Up API Keys
+
+### Google API Setup
 
 1. Create an account in Google Cloud https://cloud.google.com/?hl=en
 2. Create a new project
@@ -35,12 +37,20 @@ pip install -r requirements.txt
 5. Assign key to the project
 6. Connect to a billing account
 
+### Jira API Setup
+
+1.	Log in to the Atlassian account that has access to your Jira site.
+2.	Go to Manage API Tokens.
+3.	Click Create API token, give it a label, and copy the generated token.
+4.	Use that email/token pair in your environment or secret storage.
+
 
 1. Create an enviroment file to place api key
 2. Open the `.env` file and replace the placeholder with your API key:
    ```
    GOOGLE_GENAI_USE_VERTEXAI=FALSE
    GOOGLE_API_KEY=your_api_key_here
+   JIRA_API_KEY=your_api_key_here
    ```
 
 
